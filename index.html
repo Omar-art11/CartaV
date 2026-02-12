@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Omar Para Valeria</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  font-family:'Poppins',sans-serif;
+  background:#0b1d3a;
+}
+
+/* Fondo espacial */
+.space{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background: radial-gradient(circle at 20% 20%, #0f1b38 0%, #000 100%);
+  z-index:0;
+  overflow:hidden;
+}
+.star{
+  position:absolute;
+  background:white;
+  border-radius:50%;
+  opacity:0.8;
+}
+
+/* Carta */
+.envelope{
+  position:relative;
+  width:90%;
+  max-width:340px;
+  height:220px;
+  background:#ffffff;
+  border-radius:12px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.5);
+  cursor:pointer;
+  z-index:2;
+  perspective:1000px;
+}
+.flap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:#90caf9;
+  clip-path:polygon(0 0, 100% 0, 50% 55%);
+  transform-origin:top;
+  transition:0.8s;
+}
+.letter{
+  position:absolute;
+  width:90%;
+  height:200px;
+  background:white;
+  top:10px;
+  left:5%;
+  border-radius:8px;
+  padding:18px;
+  transform:translateY(60px);
+  opacity:0;
+  transition:0.8s;
+  color:#0b1d3a;
+  text-align:center;
+}
+.letter h2{font-family:'Dancing Script',cursive;margin:0;font-size:26px;}
+.letter p{margin-top:12px;font-size:14px;min-height:70px;}
+.envelope.open .flap{ transform:rotateX(180deg);}
+.envelope.open .letter{ transform:translateY(-140px); opacity:1;}
+
+/* Mensaje debajo */
+.mensajeFinal{
+  margin-top:25px;
+  font-family:'Dancing Script',cursive;
+  font-size:38px;
+  color:white;
+  text-align:center;
+  opacity:0;
+  text-shadow:0 0 10px #fff,0 0 20px #90caf9,0 0 40px #42a5f5;
+  transition:1.5s ease;
+  z-index:2;
+}
+
+/* Pétalos */
+.petalo{
+  position:absolute;
+  width:16px;
+  height:16px;
+  background:radial-gradient(circle at 30% 30%, #b3e5fc, #2196f3);
+  border-radius:50% 70% 50% 70%;
+  opacity:0.9;
+  animation:caer linear forwards;
+}
+@keyframes caer{0%{transform:translateY(-10vh) rotate(0deg);}100%{transform:translateY(90vh) rotate(360deg);}}
+.suelo{position:absolute; bottom:0; width:100%; height:120px;}
+</style>
+</head>
+<body>
+
+<div class="space" id="space"></div>
+<div class="suelo" id="suelo"></div>
+
+<div class="envelope" onclick="abrirCarta()">
+  <div class="flap"></div>
+  <div class="letter">
+    <h2>De: Irving Omar</h2>
+    <h2>Para: Valeria Michelle</h2>
+    <p id="texto"></p>
+  </div>
+</div>
+
+<div id="mensajeFinal" class="mensajeFinal">
+  Te Amo Mi Chispita ✨💙
+</div>
+
+<script>
+/* Texto carta */
+let mensaje = "Si el tiempo retrocediera, volvería a buscar el mismo asiento, con el corazón latiendo como la primera vez, esperando que fueras tú quien se sentara conmigo. Y si el destino dudara un segundo, lo convencería mil veces, porque fue en ese instante tan simple donde mi mundo encontró su lugar… a tu lado.";
+let i=0; let escribiendo=false;
+function abrirCarta(){
+  document.querySelector(".envelope").classList.toggle("open");
+  if(!escribiendo){escribiendo=true; escribirTexto();}
+}
+function escribirTexto(){
+  if(i<mensaje.length){
+    document.getElementById("texto").innerHTML += mensaje.charAt(i);
+    i++;
+    setTimeout(escribirTexto,35);
+  } else {setTimeout(()=>{document.getElementById("mensajeFinal").style.opacity="1";},800);}
+}
+
+/* Pétalos cayendo */
+function crearPetalo(){
+  const petalo = document.createElement("div");
+  petalo.classList.add("petalo");
+  petalo.style.left = Math.random()*100 + "vw";
+  petalo.style.animationDuration = (4 + Math.random()*3) + "s";
+  document.body.appendChild(petalo);
+  setTimeout(()=>{
+    petalo.style.animation = "none";
+    petalo.style.top="90vh";
+    petalo.style.transform="rotate("+Math.random()*360+"deg)";
+    document.getElementById("suelo").appendChild(petalo);
+  },6000);
+}
+setInterval(crearPetalo,600);
+
+/* Estrellas fondo */
+const space = document.getElementById("space");
+for(let i=0;i<120;i++){
+  const star = document.createElement("div");
+  star.classList.add("star");
+  let size = Math.random()*2+1;
+  star.style.width = size+"px";
+  star.style.height = size+"px";
+  star.style.left = Math.random()*100 + "vw";
+  star.style.top = Math.random()*100 + "vh";
+  star.style.opacity = 0.5 + Math.random()*0.5;
+  space.appendChild(star);
+}
+</script>
+</body>
+</html>
